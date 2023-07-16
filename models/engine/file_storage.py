@@ -42,3 +42,21 @@ class FileStorage:
                     FileStorage.__objects[key] = obj
         except FileNotFoundError:
             pass
+
+    def _deserialize_objects(self):
+        """Deserialize the JSON file and create User objects"""
+        if os.path.isfile(self.__file_path):
+            with open(self.__file_path, 'r') as file:
+                json_dict = json.load(file)
+                for obj_id in json_dict:
+                    class_name = json_dict[obj_id].get("__class__")
+                    if class_name == "User":
+                        self.__objects[obj_id] = User(**json_dict[obj_id])
+
+    def _serialize_objects(self):
+        """Serialize the User objects and save to the JSON file"""
+        json_dict = {}
+        for obj_id in self.__objects:
+            json_dict[obj_id] = self.__objects[obj_id].to_dict()
+        with open(self.__file_path, 'w') as file:
+            json.dump(json_dict, file)
