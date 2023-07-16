@@ -2,6 +2,8 @@
 """
 Module that defines a class State inherit from BaseModel
 """
+
+
 from models.base_model import BaseModel
 
 

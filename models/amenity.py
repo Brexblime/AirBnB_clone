@@ -2,6 +2,8 @@
 """
 Module that defines a class Amenity inherit from BaseModel
 """
+
+
 from models.base_model import BaseModel
 
 
