@@ -1,10 +1,14 @@
 #!/usr/bin/python3
+"""defines unittestsfor models/base_model.py."""
+
 
 import unittest
 from models.base_model import BaseModel
 
 
 class TestBaseModel(unittest.TestCase):
+    """BaseModel class"""
+
     def test_attributes(self):
         obj = BaseModel()
         self.assertIsNotNone(obj.id)
