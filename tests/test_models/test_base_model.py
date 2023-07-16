@@ -1,25 +1,40 @@
 #!/usr/bin/python3
 
-import uuid
-from datetime import datetime
+import unittest
+from models.base_model import BaseModel
 
 
-class BaseModel:
-    def __init__(self):
-        self.id = str(uuid.uuid4())
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now()
+class TestBaseModel(unittest.TestCase):
+    def test_attributes(self):
+        obj = BaseModel()
+        self.assertIsNotNone(obj.id)
+        self.assertIsNotNone(obj.created_at)
+        self.assertIsNotNone(obj.updated_at)
 
-    def __str__(self):
-        return ("[{}] ({}) {}".format(
-            self.__class__.__name__, self.id, self.__dict__))
+        def test_str(self):
+            obj = BaseModel()
+            obj.name = "My First Model"
+            obj.my_number = 89
+            expected_str = "[BaseModel] ({}) {}".format(obj.id, obj.__dict__)
+            self.assertEqual(str(obj), expected_str)
 
-    def save(self):
-        self.updated_at = datetime.now()
+        def test_save(self):
+            obj = BaseModel()
+            original_updated_at = obj.updated_at
+            obj.save()
+            self.assertNotEqual(obj.updated_at, original_updated_at)
 
-    def to_dict(self):
-        data = self.__dict__.copy()
-        data['__class__'] = self.__class__.__name__
-        data['created_at'] = self.created_at.isoformat()
-        data['updated_at'] = self.updated_at.isoformat()
-        return (data)
+        def test_to_dict(self):
+            obj = BaseModel()
+            obj.name = "My First Model"
+            obj.my_number = 89
+            data = obj.to_dict()
+            self.assertEqual(data['name'], "My First Model")
+            self.assertEqual(data['my_number'], 89)
+            self.assertEqual(data['__class__'], "BaseModel")
+            self.assertEqual(data['created_at'], obj.created_at.isoformat())
+            self.assertEqual(data['updated_at'], obj.updated_at.isoformat())
+
+
+if __name__ == '__main__':
+    unittest.main()
